@@ -66,7 +66,7 @@ class BrowserManager {
         // Map: authIndex -> { success: boolean, failed: boolean }
         this._wsInitState = new Map();
 
-        // Target URL for AI Studio app
+        // Target URL for Canvas app
         this.targetUrl = "https://gemini.google.com/share/fe24c455a570";
 
         // Firefox/Camoufox does not use Chromium-style command line args.
@@ -775,7 +775,7 @@ class BrowserManager {
 
         if (pageTitle.includes("Available regions") || pageTitle.includes("not available")) {
             throw new Error(
-                "🚨 The current IP does not support access to Google AI Studio. Please change the IP and restart!"
+                "🚨 The current IP does not support access to Gemini Canvas. Please change the IP and restart!"
             );
         }
 

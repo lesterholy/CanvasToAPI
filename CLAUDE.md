@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AIStudioToAPI is a proxy server that wraps Google AI Studio's web interface and exposes it as API endpoints compatible with OpenAI, Gemini, and Anthropic API formats. The system uses browser automation (Playwright with Camoufox/Firefox) to interact with AI Studio's web interface and translates API requests into browser interactions.
+AIStudioToAPI is a proxy server that wraps Gemini Canvas's web interface and exposes it as API endpoints compatible with OpenAI, Gemini, and Anthropic API formats. The system uses browser automation (Playwright with Camoufox/Firefox) to interact with the Canvas web interface and translates API requests into browser interactions.
 
 ## Common Commands
 
@@ -65,7 +65,7 @@ The system follows a modular architecture with clear separation of concerns:
 - Manages headless Firefox/Camoufox browser instances
 - Implements multi-context architecture: maintains a pool of browser contexts (Map: authIndex -> {context, page, healthMonitorInterval})
 - Handles context switching between different Google accounts
-- Injects and manages the client-side script (`build.js`) that communicates with AI Studio
+- Injects and manages the client-side script (`build.js`) that communicates with Canvas
 - Supports background context initialization and rebalancing
 
 **ConnectionRegistry** (`src/core/ConnectionRegistry.js`)
@@ -107,7 +107,7 @@ The system follows a modular architecture with clear separation of concerns:
 2. RequestHandler receives request → FormatConverter normalizes to Gemini format
 3. RequestHandler checks ConnectionRegistry for active WebSocket
 4. If no connection: BrowserManager initializes/switches browser context
-5. Request sent via WebSocket to browser context → injected script interacts with AI Studio
+5. Request sent via WebSocket to browser context → injected script interacts with Canvas
 6. Response streams back via WebSocket → FormatConverter translates to requested format
 7. On failure: AuthSwitcher may trigger account switch based on configured thresholds
 
@@ -162,7 +162,7 @@ Edit `configs/models.json` to customize available models and their settings.
 ### Browser Automation
 
 - Uses Playwright with Camoufox (privacy-focused Firefox fork)
-- Injects `build.js` script into AI Studio page for WebSocket communication
+- Injects `build.js` script into the Canvas page for WebSocket communication
 - Script location: `public/build.js` (built from `ui/app/`)
 - Health monitoring via periodic checks and reconnection logic
 
@@ -182,7 +182,7 @@ Edit `configs/models.json` to customize available models and their settings.
 
 ### Streaming Modes
 
-- **Real streaming**: True SSE streaming from AI Studio
+- **Real streaming**: True SSE streaming from Canvas
 - **Fake streaming**: Buffer complete response, then stream to client
 
 ## Development Notes

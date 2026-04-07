@@ -1,16 +1,16 @@
-# Google AI Studio to API Adapter
+# Gemini Canvas to API Adapter
 
 [中文文档](README.md) | English
 
-A tool that wraps Google AI Studio web interface to provide OpenAI API, Gemini API, and Anthropic API compatible endpoints. The service acts as a proxy, converting API requests to browser interactions with the AI Studio web interface.
+A tool that wraps the Gemini Canvas web interface to provide OpenAI API, Gemini API, and Anthropic API compatible endpoints. The service acts as a proxy, converting API requests to browser interactions with the Canvas web interface.
 
 ## ✨ Features
 
 - 🔄 **API Compatibility**: Compatible with OpenAI API, Gemini API, and Anthropic API formats
-- 🌐 **Web Automation**: Uses browser automation to interact with AI Studio web interface
+- 🌐 **Web Automation**: Uses browser automation to interact with the Canvas web interface
 - 👥 **Multi-Account Support**: Support multiple Google accounts logged in simultaneously for fast switching without re-login
 - 🔧 **Tool Calls Support**: OpenAI, Gemini, and Anthropic APIs all support Tool Calls (Function Calling)
-- 📝 **Model Support**: Access to various Gemini models through AI Studio, including image generation and TTS (text-to-speech) models
+- 📝 **Model Support**: Access to various Gemini models through Canvas, including image generation and TTS (text-to-speech) models
 - 🎨 **Homepage Display Control**: Provides a visual web console with account management, VNC login, and more
 
 ## 🚀 Quick Start
@@ -32,7 +32,7 @@ A tool that wraps Google AI Studio web interface to provide OpenAI API, Gemini A
 
    This script will:
    - Automatically download the Camoufox browser (a privacy-focused Firefox fork)
-   - Launch the browser and navigate to AI Studio automatically
+   - Launch the browser and navigate to Canvas automatically
    - Save your authentication credentials locally (auth files are stored in `/configs/auth`)
 
    > 💡 **Tip:** If downloading the Camoufox browser fails or takes too long, you can manually download it from [here](https://github.com/daijro/camoufox/releases/tag/v135.0.1-beta.24), and set the environment variable `CAMOUFOX_EXECUTABLE_PATH` to the path of the browser executable (both absolute and relative paths are supported).

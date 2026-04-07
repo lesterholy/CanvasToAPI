@@ -583,7 +583,7 @@ const main = async () => {
 
     console.log("");
     console.log("==========================================");
-    console.log(getText("  AI Studio To API - 认证设置", "  AI Studio To API - Auth Setup"));
+    console.log(getText("  Canvas To API - 认证设置", "  Canvas To API - Auth Setup"));
     console.log("==========================================");
     console.log(getText(`操作系统: ${os.platform()}  架构: ${os.arch()}`, `OS: ${os.platform()}  Arch: ${os.arch()}`));
     console.log("");

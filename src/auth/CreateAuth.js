@@ -9,6 +9,56 @@ const fs = require("fs");
 const path = require("path");
 const net = require("net");
 const { spawn } = require("child_process");
+const EMAIL_REGEX = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+
+const extractEmails = text => {
+    if (!text || typeof text !== "string") return [];
+    return [...text.matchAll(EMAIL_REGEX)].map(match => match[0]);
+};
+
+const pickBestEmailCandidate = emails => {
+    if (!Array.isArray(emails) || emails.length === 0) return null;
+    const uniqueEmails = [...new Set(emails.map(email => email.trim()).filter(Boolean))];
+    const filteredEmails = uniqueEmails.filter(email => {
+        const normalized = email.toLowerCase();
+        return normalized !== "googlers@google.com" && !normalized.endsWith("@example.com");
+    });
+    return filteredEmails[0] || uniqueEmails[0] || null;
+};
+
+const findAccountNameFromPage = async page => {
+    const strategies = [
+        async () => {
+            const scripts = await page.locator('script[type="application/json"]').allTextContents();
+            return pickBestEmailCandidate(scripts.flatMap(extractEmails));
+        },
+        async () => {
+            const scripts = await page.locator("script").allTextContents();
+            return pickBestEmailCandidate(scripts.flatMap(extractEmails));
+        },
+        async () => {
+            const data = await page.evaluate(() => {
+                try {
+                    // eslint-disable-next-line no-undef
+                    if (typeof window.WIZ_global_data === "undefined") return "";
+                    // eslint-disable-next-line no-undef
+                    return JSON.stringify(window.WIZ_global_data);
+                } catch {
+                    return "";
+                }
+            });
+            return pickBestEmailCandidate(extractEmails(data));
+        },
+        async () => pickBestEmailCandidate(extractEmails(await page.content())),
+    ];
+
+    for (const strategy of strategies) {
+        const match = await strategy();
+        if (match) return match;
+    }
+
+    return null;
+};
 
 /**
  * CreateAuth Manager
@@ -459,30 +509,16 @@ class CreateAuth {
             this.logger.info(`[VNC] Using provided account name: ${accountName}`);
         } else {
             try {
-                this.logger.info("[VNC] Attempting to retrieve account name by scanning <script> JSON...");
-                const scriptLocators = page.locator('script[type="application/json"]');
-                const count = await scriptLocators.count();
+                this.logger.info("[VNC] Attempting to retrieve account name from page data...");
+                const count = await page.locator('script[type="application/json"]').count();
                 this.logger.info(`[VNC] -> Found ${count} JSON <script> tags.`);
 
-                const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/;
-                let foundEmail = false;
-
-                for (let i = 0; i < count; i++) {
-                    const content = await scriptLocators.nth(i).textContent();
-                    if (content) {
-                        const match = content.match(emailRegex);
-                        if (match && match[0]) {
-                            accountName = match[0];
-                            this.logger.info(`[VNC] -> Successfully retrieved account: ${accountName}`);
-                            foundEmail = true;
-                            break;
-                        }
-                    }
+                accountName = await findAccountNameFromPage(page);
+                if (!accountName) {
+                    throw new Error("No email found after scanning page data.");
                 }
 
-                if (!foundEmail) {
-                    throw new Error(`Iterated through all ${count} <script> tags, but no email found.`);
-                }
+                this.logger.info(`[VNC] -> Successfully retrieved account: ${accountName}`);
             } catch (e) {
                 this.logger.warn(
                     `[VNC] Could not automatically detect email: ${e.message}. Requesting manual input from client.`

@@ -1,6 +1,6 @@
 /**
  * File: scripts/auth/saveAuth.js
- * Description: Automated script to launch browser, extract authentication state from Google AI Studio, and save to config files
+ * Description: Automated script to launch browser, extract authentication state from Gemini Canvas, and save to config files
  *
  * Author: iBUHUB
  */
@@ -34,6 +34,99 @@ const VALIDATION_LINE_THRESHOLD = 200; // Validation line threshold
 const CONFIG_DIR = "configs/auth"; // Authentication files directory
 
 const { parseProxyFromEnv } = require("../../src/utils/ProxyUtils");
+const EMAIL_REGEX = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+
+const extractEmails = text => {
+    if (!text || typeof text !== "string") return [];
+    return [...text.matchAll(EMAIL_REGEX)].map(match => match[0]);
+};
+
+const pickBestEmailCandidate = (emails, preferredEmail = null) => {
+    if (!Array.isArray(emails) || emails.length === 0) return null;
+
+    const normalizedPreferred = typeof preferredEmail === "string" ? preferredEmail.trim().toLowerCase() : null;
+    const uniqueEmails = [...new Set(emails.map(email => email.trim()).filter(Boolean))];
+
+    if (normalizedPreferred) {
+        const exactMatch = uniqueEmails.find(email => email.toLowerCase() === normalizedPreferred);
+        if (exactMatch) return exactMatch;
+    }
+
+    const filteredEmails = uniqueEmails.filter(email => {
+        const normalized = email.toLowerCase();
+        return normalized !== "googlers@google.com" && !normalized.endsWith("@example.com");
+    });
+
+    return filteredEmails[0] || uniqueEmails[0] || null;
+};
+
+const findAccountNameFromPage = async (page, preferredEmail = null) => {
+    const metaEmail = await page
+        .locator('meta[name="og-profile-acct"]')
+        .getAttribute("content")
+        .catch(() => null);
+    if (metaEmail) {
+        const match = pickBestEmailCandidate([metaEmail], preferredEmail);
+        if (match) return { accountName: match, strategy: "meta[name=og-profile-acct]" };
+    }
+
+    const strategies = [
+        {
+            collect: async () => {
+                const data = await page.evaluate(() => {
+                    try {
+                        // eslint-disable-next-line no-undef
+                        if (typeof window.WIZ_global_data === "undefined") return "";
+                        // eslint-disable-next-line no-undef
+                        return JSON.stringify(window.WIZ_global_data);
+                    } catch {
+                        return "";
+                    }
+                });
+                return extractEmails(data);
+            },
+            label: "window.WIZ_global_data",
+        },
+        {
+            collect: async () => {
+                const scripts = await page.locator('script[type="application/json"]').allTextContents();
+                return scripts.flatMap(extractEmails);
+            },
+            label: "JSON <script> tags",
+        },
+        {
+            collect: async () => {
+                const scripts = await page.locator("script").allTextContents();
+                return scripts.flatMap(extractEmails);
+            },
+            label: "all <script> tags",
+        },
+        {
+            collect: async () => extractEmails(await page.content()),
+            label: "page HTML",
+        },
+        {
+            collect: async () =>
+                extractEmails(
+                    await page
+                        .locator("body")
+                        .innerText()
+                        .catch(() => "")
+                ),
+            label: "visible page text",
+        },
+    ];
+
+    for (const strategy of strategies) {
+        const emails = await strategy.collect();
+        const match = pickBestEmailCandidate(emails, preferredEmail);
+        if (match) {
+            return { accountName: match, strategy: strategy.label };
+        }
+    }
+
+    return null;
+};
 
 /**
  * Ensures that the specified directory exists, creating it if it doesn't.
@@ -151,14 +244,14 @@ const getNextAuthIndex = () => {
         );
         console.log(
             getText(
-                "1. 浏览器将打开 Google AI Studio。请在弹出的页面上完整登录您的 Google 账号。",
-                "1. The browser will open Google AI Studio. Please log in to your Google account completely on the popup page."
+                "1. 浏览器将打开 Gemini。请在弹出的页面上完整登录您的 Google 账号。",
+                "1. The browser will open Gemini. Please log in to your Google account completely on the popup page."
             )
         );
         console.log(
             getText(
-                "2. 登录成功并看到 AI Studio 界面后，请不要关闭浏览器窗口。",
-                "2. After successful login and seeing the AI Studio interface, do not close the browser window."
+                "2. 登录成功并看到 Gemini 界面后，请不要关闭浏览器窗口。",
+                "2. After successful login and seeing the Gemini interface, do not close the browser window."
             )
         );
         console.log(
@@ -319,6 +412,46 @@ const getNextAuthIndex = () => {
         );
         console.warn(getText(`   -> 错误: ${error.message}`, `   -> Error: ${error.message}`));
         console.warn(getText('   -> 将使用 "unknown" 作为账号名称。', '   -> Will use "unknown" as account name.'));
+    }
+
+    if (accountName === "unknown" || (autoFillEmail && accountName !== autoFillEmail)) {
+        try {
+            console.log(
+                getText(
+                    "Re-checking account name (V4 - meta/WIZ/HTML)...",
+                    "Re-checking account name (V4 - meta/WIZ/HTML)..."
+                )
+            );
+
+            const accountResult = await findAccountNameFromPage(page, autoFillEmail);
+            if (accountResult) {
+                accountName = accountResult.accountName;
+                console.log(
+                    getText(
+                        `   -> V4 successfully retrieved account: ${accountName} (${accountResult.strategy})`,
+                        `   -> V4 successfully retrieved account: ${accountName} (${accountResult.strategy})`
+                    )
+                );
+            } else if (autoFillEmail) {
+                accountName = autoFillEmail;
+                console.log(
+                    getText(
+                        `   -> V4 still found no page email, using AUTO_FILL_EMAIL: ${accountName}`,
+                        `   -> V4 still found no page email, using AUTO_FILL_EMAIL: ${accountName}`
+                    )
+                );
+            }
+        } catch (error) {
+            if (autoFillEmail) {
+                accountName = autoFillEmail;
+                console.warn(
+                    getText(
+                        `   -> V4 re-check failed, using AUTO_FILL_EMAIL: ${accountName}`,
+                        `   -> V4 re-check failed, using AUTO_FILL_EMAIL: ${accountName}`
+                    )
+                );
+            }
+        }
     }
 
     // ==================== Smart Validation and Dual-file Save Logic ====================

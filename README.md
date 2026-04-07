@@ -1,16 +1,16 @@
-# Google AI Studio to API Adapter
+# Gemini Canvas to API Adapter
 
 中文文档 | [English](README_EN.md)
 
-一个将 Google AI Studio 网页端封装为兼容 OpenAI API、Gemini API 和 Anthropic API 的工具。该服务将充当代理，将 API 请求转换为与 AI Studio 网页界面的浏览器交互。
+一个将 Gemini Canvas 网页端封装为兼容 OpenAI API、Gemini API 和 Anthropic API 的工具。该服务将充当代理，将 API 请求转换为与 Canvas 网页界面的浏览器交互。
 
 ## ✨ 功能特性
 
 - 🔄 **API 兼容性**：同时兼容 OpenAI API、Gemini API 和 Anthropic API 格式
-- 🌐 **网页自动化**：使用浏览器自动化技术与 AI Studio 网页界面交互
+- 🌐 **网页自动化**：使用浏览器自动化技术与 Canvas 网页界面交互
 - 👥 **多账号支持**：支持多个 Google 账号同时登录，快速切换无需重新登录
 - 🔧 **支持工具调用**：OpenAI、Gemini 和 Anthropic 接口均支持 Tool Calls (Function Calling)
-- 📝 **模型支持**：通过 AI Studio 访问各种 Gemini 模型，包括生图模型和 TTS 语音合成模型
+- 📝 **模型支持**：通过 Canvas 访问各种 Gemini 模型，包括生图模型和 TTS 语音合成模型
 - 🎨 **主页展示控制**：提供可视化的 Web 控制台，支持账号管理、VNC 登录等操作
 
 ## 🚀 快速开始
@@ -32,7 +32,7 @@
 
    该脚本将：
    - 自动下载 Camoufox 浏览器（一个注重隐私的 Firefox 分支）
-   - 启动浏览器并自动导航到 AI Studio
+   - 启动浏览器并自动导航到 Canvas
    - 在本地保存您的身份验证凭据（auth 文件位于 `/configs/auth`）
 
    > 💡 **提示：** 如果下载 Camoufox 浏览器失败或等待太久，可以自行点击 [此处](https://github.com/daijro/camoufox/releases/tag/v135.0.1-beta.24) 下载，然后设置环境变量 `CAMOUFOX_EXECUTABLE_PATH` 为可执行文件的路径（支持绝对和相对路径）。

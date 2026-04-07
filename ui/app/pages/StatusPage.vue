@@ -2645,7 +2645,7 @@ const downloadCurrentLogs = () => {
     const mm = String(now.getMinutes()).padStart(2, "0");
     const ss = String(now.getSeconds()).padStart(2, "0");
 
-    const filename = `AIStudioProxy_${YYYY}-${MM}-${DD}_${HH}${mm}${ss}_${state.logCount}.log`;
+    const filename = `CanvasProxy_${YYYY}-${MM}-${DD}_${HH}${mm}${ss}_${state.logCount}.log`;
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

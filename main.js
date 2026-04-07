@@ -1,6 +1,6 @@
 /**
  * File: main.js
- * Description: Main entry file that initializes and starts the AIStudio To API proxy server system
+ * Description: Main entry file that initializes and starts the Canvas To API proxy server system
  *
  * Author: iBUHUB
  */
