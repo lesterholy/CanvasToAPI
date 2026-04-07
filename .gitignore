@@ -3,6 +3,7 @@
 .cursor/
 .DS_Store
 .claude/
+/AGENTS.md
 
 # Environment variables (keep .env.example)
 .env

@@ -418,7 +418,7 @@ const getNextAuthIndex = () => {
         try {
             console.log(
                 getText(
-                    "Re-checking account name (V4 - meta/WIZ/HTML)...",
+                    "正在重新检查账号名称（V4 - meta/WIZ/HTML）...",
                     "Re-checking account name (V4 - meta/WIZ/HTML)..."
                 )
             );
@@ -428,7 +428,7 @@ const getNextAuthIndex = () => {
                 accountName = accountResult.accountName;
                 console.log(
                     getText(
-                        `   -> V4 successfully retrieved account: ${accountName} (${accountResult.strategy})`,
+                        `   -> V4 成功获取账号：${accountName} (${accountResult.strategy})`,
                         `   -> V4 successfully retrieved account: ${accountName} (${accountResult.strategy})`
                     )
                 );
@@ -436,7 +436,7 @@ const getNextAuthIndex = () => {
                 accountName = autoFillEmail;
                 console.log(
                     getText(
-                        `   -> V4 still found no page email, using AUTO_FILL_EMAIL: ${accountName}`,
+                        `   -> V4 仍未在页面中找到邮箱，使用 AUTO_FILL_EMAIL：${accountName}`,
                         `   -> V4 still found no page email, using AUTO_FILL_EMAIL: ${accountName}`
                     )
                 );
@@ -446,7 +446,7 @@ const getNextAuthIndex = () => {
                 accountName = autoFillEmail;
                 console.warn(
                     getText(
-                        `   -> V4 re-check failed, using AUTO_FILL_EMAIL: ${accountName}`,
+                        `   -> V4 重新检查失败，使用 AUTO_FILL_EMAIL：${accountName}`,
                         `   -> V4 re-check failed, using AUTO_FILL_EMAIL: ${accountName}`
                     )
                 );
