@@ -7,6 +7,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { loadGeminiShareUrl } = require("./ShareLink");
 
 class ConfigLoader {
     constructor(logger) {
@@ -26,6 +27,7 @@ class ConfigLoader {
             retryDelay: 2000,
             sessionErrorThreshold: 3,
             sessionSelectionStrategy: "round",
+            sharePageUrl: loadGeminiShareUrl(this.logger),
             streamingMode: "fake",
             wsPort: 9997,
         };
@@ -146,6 +148,7 @@ class ConfigLoader {
         this.logger.info(`  Force URL Context: ${config.forceUrlContext}`);
         this.logger.info(`  Max Retries per Request: ${config.maxRetries} times`);
         this.logger.info(`  Retry Delay: ${config.retryDelay}ms`);
+        this.logger.info(`  Gemini Share Page: ${config.sharePageUrl || "Not configured"}`);
         this.logger.info(`  API Key Source: ${config.apiKeySource}`);
 
         this.logger.info("=============================================================");

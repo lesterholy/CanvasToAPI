@@ -50,7 +50,7 @@ A tool that exposes a Gemini web session as OpenAI API, Gemini API, and Anthropi
 
    Open this page in the browser that should carry the Gemini session:
 
-   [https://gemini.google.com/share/b94de199e6f5](https://gemini.google.com/share/b94de199e6f5)
+   [https://gemini.google.com/share/7f1c38698fc1](https://gemini.google.com/share/7f1c38698fc1)
 
    The actual page content is also available in the repository at [scripts/client/canvas.html](scripts/client/canvas.html).
 
@@ -118,7 +118,7 @@ services:
 
 After the container starts, you still need to manually open the following page and connect a browser session:
 
-[https://gemini.google.com/share/b94de199e6f5](https://gemini.google.com/share/b94de199e6f5)
+[https://gemini.google.com/share/7f1c38698fc1](https://gemini.google.com/share/7f1c38698fc1)
 
 On that page, manually enter the browser tag (`Browser Identifier`) and the server WebSocket address (`Server WS Endpoint`), for example `ws://your-host:9997` or `wss://your-host:9997`. Once the browser session is connected, the status page will show it as online and the API can begin forwarding requests.
 
@@ -191,7 +191,7 @@ The current version no longer uses local `auth` files or a `setup-auth` bootstra
 
 1. Start the server and make sure both `PORT` and `WS_PORT` are reachable from the browser that will carry the session.
 2. Open the console and check the current `WS_PORT` and status.
-3. Open [https://gemini.google.com/share/b94de199e6f5](https://gemini.google.com/share/b94de199e6f5) in a browser.
+3. Open [https://gemini.google.com/share/7f1c38698fc1](https://gemini.google.com/share/7f1c38698fc1) in a browser.
 4. Enter the browser identifier and the server WebSocket endpoint on that page.
 5. Wait until the status page shows at least one online browser session before sending API traffic.
 

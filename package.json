@@ -11,6 +11,8 @@
         "predev": "npm run build:ui && npm run prepare",
         "build:ui": "vite build",
         "preview:ui": "vite preview",
+        "share-link:sync": "node scripts/sync-share-link.js",
+        "share-link:set": "node scripts/sync-share-link.js",
         "start": "cross-env NODE_ENV=production node main.js",
         "prestart": "npm run build:ui",
         "prepare": "husky install",

@@ -518,7 +518,7 @@
                             <div class="section-actions">
                                 <a
                                     class="status-link"
-                                    href="https://gemini.google.com/share/b94de199e6f5"
+                                    :href="state.sharePageUrl || '#'"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -1264,6 +1264,7 @@ const state = reactive({
     selectionStrategy: "round",
     serviceConnected: false,
     sessionErrorThreshold: 3,
+    sharePageUrl: "",
     streamingMode: "fake",
     wsPort: 9997,
 });
@@ -1391,6 +1392,7 @@ const applyStatusPayload = payload => {
     state.selectionStrategy = status.selectionStrategy || "round";
     state.serviceConnected = Boolean(status.serviceConnected);
     state.streamingMode = status.streamingMode || "fake";
+    state.sharePageUrl = status.sharePageUrl || "";
     state.wsPort = Number(status.wsPort || state.wsPort || 9997);
     sessions.value = Array.isArray(status.browserSessions) ? status.browserSessions : [];
 };

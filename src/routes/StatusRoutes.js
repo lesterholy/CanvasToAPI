@@ -189,6 +189,7 @@ class StatusRoutes {
             selectionStrategy: this.config.sessionSelectionStrategy,
             sessionErrorThreshold: this.config.sessionErrorThreshold,
             sessionSelectionState: this.serverSystem.sessionRegistry.getSelectionState(),
+            sharePageUrl: this.config.sharePageUrl,
             streamingMode: this.serverSystem.streamingMode,
             wsPort: this.config.wsPort,
         };

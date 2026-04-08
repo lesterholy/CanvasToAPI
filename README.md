@@ -50,7 +50,7 @@
 
    在需要承载 Gemini 会话的浏览器中打开：
 
-   [https://gemini.google.com/share/b94de199e6f5](https://gemini.google.com/share/b94de199e6f5)
+   [https://gemini.google.com/share/7f1c38698fc1](https://gemini.google.com/share/7f1c38698fc1)
 
    该页面的实际内容可参考仓库中的 [scripts/client/canvas.html](scripts/client/canvas.html)。
 
@@ -118,7 +118,7 @@ services:
 
 容器启动后，仍然需要手动打开以下页面建立浏览器会话：
 
-[https://gemini.google.com/share/b94de199e6f5](https://gemini.google.com/share/b94de199e6f5)
+[https://gemini.google.com/share/7f1c38698fc1](https://gemini.google.com/share/7f1c38698fc1)
 
 页面中需要手动填写浏览器标志（`Browser Identifier`）和服务端 WebSocket 地址（`Server WS Endpoint`，例如 `ws://your-host:9997` 或 `wss://your-host:9997`）。连接建立成功后，状态页会显示在线浏览器会话，之后 API 请求才会被转发。
 
@@ -191,7 +191,7 @@ services:
 
 1. 启动服务端，并确保 `PORT` 和 `WS_PORT` 都能被建立会话的浏览器访问到。
 2. 打开控制台查看当前 `WS_PORT` 和连接状态。
-3. 在浏览器中打开 [https://gemini.google.com/share/b94de199e6f5](https://gemini.google.com/share/b94de199e6f5)。
+3. 在浏览器中打开 [https://gemini.google.com/share/7f1c38698fc1](https://gemini.google.com/share/7f1c38698fc1)。
 4. 在页面中填写浏览器标志和服务端 WebSocket 地址。
 5. 等待状态页出现在线会话后，再开始调用 API。
 
