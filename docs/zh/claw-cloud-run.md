@@ -15,15 +15,9 @@
    - **CPU**：`0.5`
    - **Memory**：`1G`
 
-   > 💡 **提示**：如果需要通过 VNC 登录账号，**1G 内存**可能不足以支撑浏览器运行。建议先将配置调整为 **0.2 CPU / 2G Memory** 进行 VNC 登录操作，登录完成后再改回 **0.5 CPU / 1G Memory**。
-
    **Network**:
    - **Container Port**：`7861`
    - **Public Access**：开启（Toggle **On**，后面的网址选项不用动）。
-
-   **Local Storage**:
-   - **Capacity**：1
-   - **Mount Path**：/app/configs/auth
 
    **环境变量（Environment Variables）**:
 
@@ -32,8 +26,6 @@
    | Name       | Value                 | Description                                        |
    | :--------- | :-------------------- | :------------------------------------------------- |
    | `API_KEYS` | `your-secret-key-123` | **必填**。自定义你的访问密钥，多个密钥用逗号分隔。 |
-
-   > ⚠️ **注意**：请勿设置或修改 `MAX_CONTEXTS` 环境变量，保持默认值 1 即可。增加该值会显著提高内存占用，可能导致服务因内存不足而崩溃。
 
 4. **部署**：点击 **Create App** 开始部署。
 
@@ -45,29 +37,31 @@
 
 ## 🔑 账号管理
 
-部署后，需要添加 Google 账号。有以下两种方式：
+当前版本不再通过 VNC 或上传 Auth 文件来管理账号。部署完成后，请直接按主 README 的 [浏览器会话连接](../../README.md#-浏览器会话连接) 流程操作。
 
-**方法 1：VNC 登录（推荐）**
+建立浏览器会话时，请在 Gemini 分享页中填写：
 
-- 在浏览器中访问部署的服务地址并点击「添加账号」按钮
-- 将跳转到 VNC 页面，显示浏览器实例
-- 登录您的 Google 账号，登录完成后点击「保存」按钮
+- `Browser Identifier`：浏览器标志，可自定义
+- `API Key`：填写与你请求 API 时相同的 key
+- `Server WS Endpoint`：如果你是通过 Claw Cloud 分配的公网 `https://` 地址访问控制台，这里应填写 `wss://你的公网地址/ws`
 
-**方法 2：上传认证文件**
+填写示例：
 
-- 在本地机器上运行 `npm run setup-auth` 生成认证文件（参考主 README 中的 [直接运行](../../README.md#-直接运行windows--macos--linux) 的 1 和 2），认证文件在 `/configs/auth`
-- 在网页控制台，点击「上传 Auth」，上传 auth 的 JSON 文件
+- 如果控制台地址是 `https://canvas-api-xxxx.claw.cloud`
+  则 `Server WS Endpoint` 填 `wss://canvas-api-xxxx.claw.cloud/ws`
+- 如果你后面又绑定了自己的 HTTPS 域名，例如 `https://api.example.com`
+  则填写 `wss://api.example.com/ws`
 
-> 💡 **提示**：您也可以从已有的服务器下载 auth 文件，然后上传到新的服务器。在网页控制台点击对应账号的「下载 Auth」按钮即可下载 auth 文件。
+连接成功后，回到状态页确认 `Browser Sessions` 中已经出现在线会话，再开始发送 API 请求。
 
 ## 🔌 API 访问地址
 
 部署完成后，使用 **Public Address** 配合以下 Base URL 访问 API：
 
-- **OpenAI 兼容 Base URL**: `https://<your-public-address>/v1`
-- **OpenAI Responses 兼容 Base URL**: `https://<your-public-address>/v1`
-- **Gemini 兼容 Base URL**: `https://<your-public-address>/v1beta`
-- **Anthropic 兼容 Base URL**: `https://<your-public-address>/v1`
+- **OpenAI 兼容 Base URL**：`https://<your-public-address>/v1`
+- **OpenAI Responses 兼容 Base URL**：`https://<your-public-address>/v1`
+- **Gemini 兼容 Base URL**：`https://<your-public-address>/v1beta`
+- **Anthropic 兼容 Base URL**：`https://<your-public-address>/v1`
 
 > 更多详细信息，请参考主 README 中的 [使用 API](../../README.md#-使用-api) 章节。
 

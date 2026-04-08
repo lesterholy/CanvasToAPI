@@ -130,6 +130,12 @@ If you need to access the service through a domain name or put it behind a rever
 >
 > 📖 For detailed Nginx configuration instructions, see: [Nginx Reverse Proxy Configuration](docs/en/nginx-setup.md)
 
+### 🐾 Claw Cloud Run Deployment
+
+Deploy directly on Claw Cloud Run, a fully managed container platform.
+
+> 📖 For detailed deployment instructions, see: [Deploy on Claw Cloud Run](docs/en/claw-cloud-run.md)
+
 ## 📗 API Usage
 
 ### 🤖 OpenAI-Compatible API
@@ -199,8 +205,9 @@ The current version no longer uses local `auth` files or a `setup-auth` bootstra
 1. Start the server and make sure `PORT` is reachable from the browser that will carry the session.
 2. Open the console and check the browser-session endpoint and connection status.
 3. Open [https://gemini.google.com/share/38b50bd0acb0](https://gemini.google.com/share/38b50bd0acb0) in a browser.
-4. Enter the browser identifier and the server WebSocket endpoint on that page.
-5. Wait until the status page shows at least one online browser session before sending API traffic.
+4. Enter the browser identifier (`Browser Identifier`), API key, and the server WebSocket endpoint (`Server WS Endpoint`) on that page.
+5. Use the same API key that you use for API requests. For local deployments, `Server WS Endpoint` can be `ws://127.0.0.1:7861/ws`. If the console is accessed through `https://` on a remote server, it should be `wss://your-domain-or-public-address/ws`.
+6. Wait until the status page shows at least one online browser session before sending API traffic.
 
 ### 🧠 Model List Configuration
 

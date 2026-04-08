@@ -130,6 +130,12 @@ services:
 >
 > 📖 详细的 Nginx 配置说明请参阅：[Nginx 反向代理配置文档](docs/zh/nginx-setup.md)
 
+### 🐾 Claw Cloud Run 部署
+
+支持直接部署到 Claw Cloud Run，全托管的容器平台。
+
+> 📖 详细部署说明请参阅：[部署到 Claw Cloud Run](docs/zh/claw-cloud-run.md)
+
 ## 📗 使用 API
 
 ### 🤖 OpenAI 兼容 API
@@ -199,8 +205,9 @@ services:
 1. 启动服务端，并确保 `PORT` 能被建立会话的浏览器访问到。
 2. 打开控制台查看当前浏览器会话连接地址和连接状态。
 3. 在浏览器中打开 [https://gemini.google.com/share/38b50bd0acb0](https://gemini.google.com/share/38b50bd0acb0)。
-4. 在页面中填写浏览器标志和服务端 WebSocket 地址。
-5. 等待状态页出现在线会话后，再开始调用 API。
+4. 在页面中填写浏览器标志（`Browser Identifier`）、API Key，以及服务端 WebSocket 地址（`Server WS Endpoint`）。
+5. `API Key` 请填写与你请求 API 时相同的 key；`Server WS Endpoint` 本地可填写 `ws://127.0.0.1:7861/ws`，如果控制台是通过 `https://` 访问的远程服务，则应填写 `wss://你的域名或公网地址/ws`。
+6. 等待状态页出现在线会话后，再开始调用 API。
 
 ### 🧠 模型列表配置
 

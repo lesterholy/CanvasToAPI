@@ -15,15 +15,9 @@ This guide will help you deploy the `canvas-to-api` service on [Claw Cloud Run](
    - **CPU**: `0.5`
    - **Memory**: `1G`
 
-   > 💡 **Tip**: If you need to log in via VNC, **1G Memory** might not be sufficient for the browser. It is recommended to temporarily adjust the configuration to **0.2 CPU / 2G Memory** for the VNC login process, and then revert to **0.5 CPU / 1G Memory** after logging in.
-
    **Network**:
    - **Container Port**: `7861`
-   - **Public Access**: Toggle **On** (Leave the URL usage as is).
-
-   **Local Storage**:
-   - **Capacity**：1
-   - **Mount Path**：/app/configs/auth
+   - **Public Access**: enabled
 
    **Environment Variables**:
 
@@ -32,8 +26,6 @@ This guide will help you deploy the `canvas-to-api` service on [Claw Cloud Run](
    | Name       | Value                 | Description                                |
    | :--------- | :-------------------- | :----------------------------------------- |
    | `API_KEYS` | `your-secret-key-123` | **Required**. Define your own access keys. |
-
-   > ⚠️ **Warning**: Do not set or modify the `MAX_CONTEXTS` environment variable. Keep the default value of 1. Increasing this value will significantly increase memory usage and may cause the service to crash due to insufficient memory.
 
 4. **Deploy**: Click **Create App** to start the deployment.
 
@@ -45,20 +37,22 @@ This guide will help you deploy the `canvas-to-api` service on [Claw Cloud Run](
 
 ## 🔑 Account Management
 
-After deployment, you need to add Google accounts. There are two methods:
+The current version no longer uses VNC login or auth-file upload for account management. After deployment, follow the main README [Browser Session Connection](../../README_EN.md#-browser-session-connection) flow directly.
 
-**Method 1: VNC-Based Login (Recommended)**
+On the Gemini share page, fill in:
 
-- Access the deployed service address in your browser and click the "Add User" button
-- You'll be redirected to a VNC page with a browser instance
-- Log in to your Google account, then click the "Save" button after login is complete
+- `Browser Identifier`: any label you want to use for the browser session
+- `API Key`: the same key you use for API requests
+- `Server WS Endpoint`: if your console is accessed through Claw Cloud over `https://`, this should be `wss://your-public-address/ws`
 
-**Method 2: Upload Auth Files**
+Examples:
 
-- Run `npm run setup-auth` on your local machine to generate auth files (refer to steps 1 and 2 of [Run Directly](../../README_EN.md#-run-directly-windows--macos--linux) in the main README), the auth files are in `/configs/auth`
-- In the web console, click "Upload Auth" to upload the auth JSON file
+- If your console URL is `https://canvas-api-xxxx.claw.cloud`
+  then `Server WS Endpoint` should be `wss://canvas-api-xxxx.claw.cloud/ws`
+- If you later bind your own HTTPS domain, for example `https://api.example.com`
+  then use `wss://api.example.com/ws`
 
-> 💡 **Tip**: You can also download auth files from an existing server and upload them to a new server. Click the "Download Auth" button for the corresponding account in the web console to download the auth file.
+After the browser session connects, return to the status page and confirm that `Browser Sessions` shows at least one online session before sending API traffic.
 
 ## 🔌 API Endpoints
 
