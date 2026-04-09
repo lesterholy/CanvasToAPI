@@ -67,12 +67,8 @@ class RequestHandler {
         }
     }
 
-    async _switchToNextSession(currentSessionId, excludedConnectionIds = new Set()) {
-        const nextConnection = this.connectionRegistry.switchToNextConnection(
-            currentSessionId,
-            this.config.sessionSelectionStrategy,
-            excludedConnectionIds
-        );
+    async _switchToNextSession(currentSessionId) {
+        const nextConnection = this.connectionRegistry.switchToNextConnection(this.config.sessionSelectionStrategy);
         if (!nextConnection) {
             const currentConnection = currentSessionId
                 ? this.connectionRegistry.getConnectionBySession(currentSessionId)
@@ -89,9 +85,15 @@ class RequestHandler {
             return null;
         }
 
-        this.logger.info(
-            `[Session] Switched session from ${this._describeSession(currentSessionId)} to ${this._describeSession(nextConnection.connectionId)} via ${this.config.sessionSelectionStrategy}.`
-        );
+        if (nextConnection.connectionId === currentSessionId) {
+            this.logger.info(
+                `[Session] Retrying on the same session ${this._describeSession(currentSessionId)} via ${this.config.sessionSelectionStrategy}.`
+            );
+        } else {
+            this.logger.info(
+                `[Session] Switched session from ${this._describeSession(currentSessionId)} to ${this._describeSession(nextConnection.connectionId)} via ${this.config.sessionSelectionStrategy}.`
+            );
+        }
         return nextConnection.connectionId;
     }
 
@@ -421,14 +423,6 @@ class RequestHandler {
         return true;
     }
 
-    _createImmediateSwitchTracker(sessionId) {
-        const attemptedSessionIds = new Set();
-        if (sessionId) {
-            attemptedSessionIds.add(sessionId);
-        }
-        return { attemptedSessionIds };
-    }
-
     _shouldSwitchSessionOnError(errorDetails) {
         if (!errorDetails || isUserAbortedError(errorDetails)) {
             return false;
@@ -454,16 +448,14 @@ class RequestHandler {
         return `Received error: ${errorDetails?.message || "unknown error"}`;
     }
 
-    async _performImmediateSwitchRetry(errorDetails, requestId, tracker, sessionId) {
-        const nextSessionId = await this._switchToNextSession(sessionId, tracker.attemptedSessionIds);
+    async _performImmediateSwitchRetry(requestId, sessionId) {
+        const nextSessionId = await this._switchToNextSession(sessionId);
         if (!nextSessionId) {
             this.logger.warn(
                 `[Request] Immediate switch for request #${requestId} did not find another available browser session.`
             );
             return null;
         }
-
-        tracker.attemptedSessionIds.add(nextSessionId);
         return nextSessionId;
     }
 
@@ -605,8 +597,6 @@ class RequestHandler {
                 let initialMessage;
                 let retryAttempt = 1;
                 let skipFinalFailureSwitch = false;
-                const immediateSwitchTracker = this._createImmediateSwitchTracker(sessionId);
-
                 while (retryAttempt <= this.maxRetries) {
                     this._forwardRequest(proxyRequest, sessionId);
                     initialMessage = await currentQueue.dequeue();
@@ -619,12 +609,7 @@ class RequestHandler {
                         this.logger.warn(
                             `[Request] OpenAI real stream ${this._describeErrorForSessionSwitch(initialMessage)}, switching session and retrying...`
                         );
-                        const nextSessionId = await this._performImmediateSwitchRetry(
-                            initialMessage,
-                            requestId,
-                            immediateSwitchTracker,
-                            sessionId
-                        );
+                        const nextSessionId = await this._performImmediateSwitchRetry(requestId, sessionId);
                         if (!nextSessionId) {
                             skipFinalFailureSwitch = true;
                             break;
@@ -913,8 +898,6 @@ class RequestHandler {
                 let initialMessage;
                 let retryAttempt = 1;
                 let skipFinalFailureSwitch = false;
-                const immediateSwitchTracker = this._createImmediateSwitchTracker(sessionId);
-
                 while (retryAttempt <= this.maxRetries) {
                     this._forwardRequest(proxyRequest, sessionId);
                     initialMessage = await currentQueue.dequeue();
@@ -927,12 +910,7 @@ class RequestHandler {
                         this.logger.warn(
                             `[Request] OpenAI Response API real stream ${this._describeErrorForSessionSwitch(initialMessage)}, switching session and retrying...`
                         );
-                        const nextSessionId = await this._performImmediateSwitchRetry(
-                            initialMessage,
-                            requestId,
-                            immediateSwitchTracker,
-                            sessionId
-                        );
+                        const nextSessionId = await this._performImmediateSwitchRetry(requestId, sessionId);
                         if (!nextSessionId) {
                             skipFinalFailureSwitch = true;
                             break;
@@ -1182,8 +1160,6 @@ class RequestHandler {
                 let initialMessage;
                 let retryAttempt = 1;
                 let skipFinalFailureSwitch = false;
-                const immediateSwitchTracker = this._createImmediateSwitchTracker(sessionId);
-
                 while (retryAttempt <= this.maxRetries) {
                     this._forwardRequest(proxyRequest, sessionId);
                     initialMessage = await currentQueue.dequeue();
@@ -1196,12 +1172,7 @@ class RequestHandler {
                         this.logger.warn(
                             `[Request] Claude real stream ${this._describeErrorForSessionSwitch(initialMessage)}, switching session and retrying...`
                         );
-                        const nextSessionId = await this._performImmediateSwitchRetry(
-                            initialMessage,
-                            requestId,
-                            immediateSwitchTracker,
-                            sessionId
-                        );
+                        const nextSessionId = await this._performImmediateSwitchRetry(requestId, sessionId);
                         if (!nextSessionId) {
                             skipFinalFailureSwitch = true;
                             break;
@@ -2033,8 +2004,6 @@ class RequestHandler {
         let headerMessage;
         let retryAttempt = 1;
         let skipFinalFailureSwitch = false;
-        const immediateSwitchTracker = this._createImmediateSwitchTracker(sessionId);
-
         while (retryAttempt <= this.maxRetries) {
             this._forwardRequest(proxyRequest, sessionId);
             headerMessage = await currentQueue.dequeue();
@@ -2047,12 +2016,7 @@ class RequestHandler {
                 this.logger.warn(
                     `[Request] Gemini real stream ${this._describeErrorForSessionSwitch(headerMessage)}, switching session and retrying...`
                 );
-                const nextSessionId = await this._performImmediateSwitchRetry(
-                    headerMessage,
-                    proxyRequest.request_id,
-                    immediateSwitchTracker,
-                    sessionId
-                );
+                const nextSessionId = await this._performImmediateSwitchRetry(proxyRequest.request_id, sessionId);
                 if (!nextSessionId) {
                     skipFinalFailureSwitch = true;
                     break;
@@ -2321,8 +2285,6 @@ class RequestHandler {
         // Track the session id for the current queue to ensure proper cleanup
         let currentQueueSessionId = sessionId;
         let retryAttempt = 1;
-        const immediateSwitchTracker = this._createImmediateSwitchTracker(sessionId);
-
         while (retryAttempt <= this.maxRetries) {
             try {
                 this._forwardRequest(proxyRequest, sessionId);
@@ -2414,9 +2376,7 @@ class RequestHandler {
                     );
                     try {
                         const nextSessionId = await this._performImmediateSwitchRetry(
-                            lastError,
                             proxyRequest.request_id,
-                            immediateSwitchTracker,
                             sessionId
                         );
                         if (!nextSessionId) {
@@ -2463,9 +2423,7 @@ class RequestHandler {
                     );
                     try {
                         const nextSessionId = await this._performImmediateSwitchRetry(
-                            errorPayload,
                             proxyRequest.request_id,
-                            immediateSwitchTracker,
                             sessionId
                         );
                         if (!nextSessionId) {

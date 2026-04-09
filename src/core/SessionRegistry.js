@@ -120,12 +120,8 @@ class SessionRegistry extends EventEmitter {
         return selected;
     }
 
-    switchToNextConnection(currentConnectionId = null, strategy = "round", excludedConnectionIds = new Set()) {
-        const excluded = new Set(excludedConnectionIds);
-        if (currentConnectionId) {
-            excluded.add(currentConnectionId);
-        }
-        return this.pickConnection(strategy, excluded);
+    switchToNextConnection(strategy = "round", excludedConnectionIds = new Set()) {
+        return this.pickConnection(strategy, excludedConnectionIds);
     }
 
     recordConnectionUsage(connectionId) {

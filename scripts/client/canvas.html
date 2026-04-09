@@ -119,31 +119,22 @@
 <div class="flex h-screen w-full flex-col overflow-hidden px-3 py-3 md:px-5 md:py-4 xl:px-6">
     <header
         id="page-header"
-        class="mb-3 flex flex-none flex-col gap-4 rounded-[1.75rem] border border-slate-800 bg-slate-900/80 p-4 shadow-2xl shadow-slate-950/30 md:gap-5 md:p-5"
+        class="mb-3 flex flex-none flex-col gap-2 rounded-[1.75rem] border border-slate-800 bg-slate-900/80 p-4 shadow-2xl shadow-slate-950/30 md:gap-2 md:p-5"
     >
-        <div class="flex items-start justify-between gap-3">
-            <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-                    </span>
-                    <p class="brand-mark text-xs uppercase font-bold tracking-[0.3em] text-cyan-400/90">CanvasToAPI</p>
-                </div>
-                <h1
-                    class="page-title mt-2 text-2xl font-bold tracking-tight text-white md:text-[2rem] md:leading-tight"
-                    data-i18n="pageTitle"
-                >
-                    Browser Session Client
-                </h1>
-                <p
-                    class="page-subtitle mt-1.5 max-w-2xl text-xs leading-relaxed text-slate-400 md:text-sm"
-                    data-i18n="pageDescription"
-                >
-                    Proxy Gemini API requests. Save the endpoint, then connect and keep the page open.
-                </p>
+        <div class="flex items-center justify-between gap-3">
+            <div class="flex min-w-0 items-center gap-2">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                </span>
+                <p class="brand-mark truncate text-xs font-bold text-cyan-400/90">CanvasToAPI</p>
             </div>
             <div class="flex shrink-0 items-center gap-2">
+                <button
+                    id="header-collapse-toggle"
+                    type="button"
+                    class="control-chip rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] transition hover:border-cyan-500/60 hover:text-white"
+                ></button>
                 <button
                     id="locale-toggle"
                     type="button"
@@ -157,88 +148,105 @@
             </div>
         </div>
 
-        <div class="grid min-w-0 grid-cols-1 gap-2 md:grid-cols-3 md:gap-4">
-            <div class="min-w-0 space-y-1.5">
-                <div class="flex justify-between items-center px-1">
-                    <label
-                        class="field-label text-[10px] uppercase font-bold tracking-wider text-slate-500"
-                        for="ws-endpoint"
-                        data-i18n="serverWsEndpoint"
-                    >
-                        Server WS Endpoint
-                    </label>
-                </div>
-                <input
-                    id="ws-endpoint"
-                    placeholder="ws://127.0.0.1:7861/ws"
-                    class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 font-mono text-sm text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50"
-                />
-            </div>
-
-            <div class="min-w-0 space-y-1.5">
-                <div class="flex justify-between items-center px-1">
-                    <label
-                        class="field-label text-[10px] uppercase font-bold tracking-wider text-slate-500"
-                        for="client-label"
-                        data-i18n="browserIdentifier"
-                    >
-                        Browser Identifier
-                    </label>
-                    <span class="field-hint text-[10px] text-slate-600 whitespace-nowrap" data-i18n="blankAutoDaily">Blank = auto generate</span>
-                </div>
-                <input
-                    id="client-label"
-                    data-i18n-placeholder="clientLabelPlaceholder"
-                    placeholder="Auto-generate a browser tag"
-                    class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 font-mono text-sm text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50"
-                />
-            </div>
-
-            <div class="min-w-0 space-y-1.5">
-                <div class="flex justify-between items-center px-1">
-                    <label
-                        class="field-label text-[10px] uppercase font-bold tracking-wider text-slate-500"
-                        for="api-key"
-                        data-i18n="apiKeyLabel"
-                    >
-                        API Key
-                    </label>
-                </div>
-                <input
-                    id="api-key"
-                    type="password"
-                    data-i18n-placeholder="apiKeyPlaceholder"
-                    placeholder="Same API key used for requests"
-                    class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 font-mono text-sm text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50"
-                />
-            </div>
+        <div class="min-w-0 -mt-1">
+            <h1
+                class="page-title text-2xl font-bold tracking-tight text-white md:text-[2rem] md:leading-tight"
+                data-i18n="pageTitle"
+            >
+                Browser Session Client
+            </h1>
+            <p
+                class="page-subtitle mt-1.5 max-w-2xl text-xs leading-relaxed text-slate-400 md:text-sm"
+                data-i18n="pageDescription"
+            >
+                Proxy Gemini API requests. Save the endpoint, then connect and keep the page open.
+            </p>
         </div>
 
-        <div class="flex flex-col gap-2.5 border-t border-slate-800/80 pt-3 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex flex-wrap items-center gap-2">
-                <button
-                    id="save-btn"
-                    class="flex-1 rounded-xl bg-slate-800 px-4 py-2 text-sm font-bold text-slate-300 transition hover:bg-slate-700 active:scale-95 sm:flex-none"
-                    data-i18n="save"
-                >
-                    Save
-                </button>
-                <button
-                    id="connect-btn"
-                    class="mt-0.5 flex-1 rounded-xl bg-cyan-500 px-6 py-2 text-sm font-bold text-slate-950 transition hover:bg-cyan-400 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-[180px] sm:flex-none"
-                >
-                    Connect
-                </button>
-                <span id="save-tip" class="px-1 text-[10px] font-bold text-emerald-400 opacity-0 transition-opacity" data-i18n="saved">
-                    SAVED!
-                </span>
-            </div>
-            <div class="flex items-center justify-between px-1 sm:min-w-[240px] sm:justify-end sm:gap-6">
-                <div class="flex items-center gap-2">
-                    <span id="status-indicator" class="h-2 w-2 rounded-full bg-amber-500"></span>
-                    <span id="status-text" class="text-[10px] font-bold uppercase tracking-wide text-amber-500">Disconnected</span>
+        <div id="header-config-content" class="flex flex-col gap-4">
+            <div id="header-config-fields" class="grid min-w-0 grid-cols-1 gap-2 md:grid-cols-3 md:gap-4">
+                <div class="min-w-0 space-y-1.5">
+                    <div class="flex justify-between items-center px-1">
+                        <label
+                            class="field-label text-[10px] uppercase font-bold tracking-wider text-slate-500"
+                            for="ws-endpoint"
+                            data-i18n="serverWsEndpoint"
+                        >
+                            Server WS Endpoint
+                        </label>
+                    </div>
+                    <input
+                        id="ws-endpoint"
+                        placeholder="ws://127.0.0.1:7861/ws"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 font-mono text-sm text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50"
+                    />
                 </div>
-                <span class="meta-text text-[10px] font-mono text-slate-600">v0.0.2-stable</span>
+
+                <div class="min-w-0 space-y-1.5">
+                    <div class="flex justify-between items-center px-1">
+                        <label
+                            class="field-label text-[10px] uppercase font-bold tracking-wider text-slate-500"
+                            for="client-label"
+                            data-i18n="browserIdentifier"
+                        >
+                            Browser Identifier
+                        </label>
+                        <span class="field-hint text-[10px] text-slate-600 whitespace-nowrap" data-i18n="blankAutoDaily">Blank = auto generate</span>
+                    </div>
+                    <input
+                        id="client-label"
+                        data-i18n-placeholder="clientLabelPlaceholder"
+                        placeholder="Auto-generate a browser tag"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 font-mono text-sm text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50"
+                    />
+                </div>
+
+                <div class="min-w-0 space-y-1.5">
+                    <div class="flex justify-between items-center px-1">
+                        <label
+                            class="field-label text-[10px] uppercase font-bold tracking-wider text-slate-500"
+                            for="api-key"
+                            data-i18n="apiKeyLabel"
+                        >
+                            API Key
+                        </label>
+                    </div>
+                    <input
+                        id="api-key"
+                        type="password"
+                        data-i18n-placeholder="apiKeyPlaceholder"
+                        placeholder="Same API key used for requests"
+                        class="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 font-mono text-sm text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50"
+                    />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2.5 border-t border-slate-800/80 pt-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button
+                        id="save-btn"
+                        class="flex-1 rounded-xl bg-slate-800 px-4 py-2 text-sm font-bold text-slate-300 transition hover:bg-slate-700 active:scale-95 sm:flex-none"
+                        data-i18n="save"
+                    >
+                        Save
+                    </button>
+                    <button
+                        id="connect-btn"
+                        class="mt-0.5 flex-1 rounded-xl bg-cyan-500 px-6 py-2 text-sm font-bold text-slate-950 transition hover:bg-cyan-400 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-[180px] sm:flex-none"
+                    >
+                        Connect
+                    </button>
+                    <span id="save-tip" class="px-1 text-[10px] font-bold text-emerald-400 opacity-0 transition-opacity" data-i18n="saved">
+                        SAVED!
+                    </span>
+                </div>
+                <div class="flex items-center justify-between px-1 sm:min-w-[240px] sm:justify-end sm:gap-6">
+                    <div class="flex items-center gap-2">
+                        <span id="status-indicator" class="h-2 w-2 rounded-full bg-amber-500"></span>
+                        <span id="status-text" class="text-[10px] font-bold uppercase tracking-wide text-amber-500">Disconnected</span>
+                    </div>
+                    <span class="meta-text text-[10px] font-mono text-slate-600">v0.0.2-stable</span>
+                </div>
             </div>
         </div>
     </header>
@@ -313,6 +321,10 @@
             switchToDarkTheme: "切换到深色主题",
             themeLightShort: "浅色",
             themeDarkShort: "深色",
+            headerConfigHide: "收起",
+            headerConfigHideTitle: "收起配置",
+            headerConfigShow: "配置",
+            headerConfigShowTitle: "展开配置",
         },
         "en-US": {
             apiKeyLabel: "API Key",
@@ -347,6 +359,10 @@
             switchToDarkTheme: "Switch to dark theme",
             themeLightShort: "Light",
             themeDarkShort: "Dark",
+            headerConfigHide: "Hide",
+            headerConfigHideTitle: "Hide settings",
+            headerConfigShow: "Config",
+            headerConfigShowTitle: "Show settings",
         },
     };
 
@@ -424,6 +440,7 @@
             ? sanitizeClientLabel(safeStorageGet(CLIENT_LABEL_STORAGE_KEY)) || getAutoClientLabel()
             : getAutoClientLabel();
     let currentStatus = "disconnected";
+    let isHeaderConfigCollapsed = false;
 
     if (currentClientLabelMode === "manual" && !safeStorageGet(CLIENT_LABEL_STORAGE_KEY)) {
         currentClientLabelMode = "auto";
@@ -448,6 +465,25 @@
             themeToggle.textContent = currentTheme === "dark" ? t("themeLightShort") : t("themeDarkShort");
             themeToggle.title = currentTheme === "dark" ? t("switchToLightTheme") : t("switchToDarkTheme");
         }
+        const headerCollapseToggle = document.getElementById("header-collapse-toggle");
+        if (headerCollapseToggle) {
+            const isCollapsed = isHeaderConfigCollapsed;
+            headerCollapseToggle.textContent = isCollapsed ? t("headerConfigShow") : t("headerConfigHide");
+            headerCollapseToggle.title = isCollapsed ? t("headerConfigShowTitle") : t("headerConfigHideTitle");
+            headerCollapseToggle.setAttribute("aria-label", headerCollapseToggle.title);
+            headerCollapseToggle.setAttribute("aria-expanded", String(!isCollapsed));
+        }
+    };
+    const applyHeaderCollapseState = () => {
+        const configContent = document.getElementById("header-config-content");
+        const headerCollapseToggle = document.getElementById("header-collapse-toggle");
+        const shouldCollapse = isHeaderConfigCollapsed;
+
+        if (configContent) {
+            configContent.classList.toggle("hidden", shouldCollapse);
+        }
+
+        updateHeaderControls();
     };
     const applyI18n = () => {
         document.documentElement.lang = currentLocale === "zh-CN" ? "zh-CN" : "en-US";
@@ -1285,9 +1321,11 @@
     const saveTip = document.getElementById("save-tip");
     const localeToggleBtn = document.getElementById("locale-toggle");
     const themeToggleBtn = document.getElementById("theme-toggle");
+    const headerCollapseToggleBtn = document.getElementById("header-collapse-toggle");
 
     applyTheme(currentTheme);
     applyI18n();
+    applyHeaderCollapseState();
     endpointInput.value = currentEndpoint;
     clientLabelInput.value = currentClientLabel;
     apiKeyInput.value = currentApiKey;
@@ -1342,6 +1380,13 @@
         applyTheme(currentTheme === "dark" ? "light" : "dark");
         updateHeaderControls();
     });
+
+    if (headerCollapseToggleBtn) {
+        headerCollapseToggleBtn.addEventListener("click", () => {
+            isHeaderConfigCollapsed = !isHeaderConfigCollapsed;
+            applyHeaderCollapseState();
+        });
+    }
 
     connectBtn.addEventListener("click", async () => {
         const isStopping = proxySystem.connectionManager.isConnected || currentStatus === "reconnecting";
