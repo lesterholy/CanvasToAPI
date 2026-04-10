@@ -57,11 +57,11 @@
    该页面的实际内容可参考仓库中的 [scripts/client/canvas.html](scripts/client/canvas.html)。
 
    打开后请手动填写：
-   - `Server WS Endpoint`：例如本地部署填写 `ws://127.0.0.1:7861/ws`，远程部署填写你的服务端 WebSocket 地址
+   - `Server WS Endpoint`：本地部署填写 `ws://127.0.0.1:7861/ws`
    - `API Key`：填写与请求时相同的 `API_KEYS` 中任意一个 key
    - `Browser Identifier`：浏览器标志，可自定义；留空时页面会自动生成每日标志
 
-   填写完成后点击 `Connect`。连接成功后，回到状态页确认 `Browser Sessions` 中已有在线会话。
+   填写完成后点击 `保存` 再点击 `连接`。连接成功后，回到状态页确认 `浏览器会话` 中已有在线会话。
 
 6. 开始调用 API：
 
@@ -142,7 +142,7 @@ services:
 
 [https://gemini.google.com/share/a106ab8dac80](https://gemini.google.com/share/a106ab8dac80)
 
-页面中需要手动填写浏览器标志（`Browser Identifier`）、API Key，以及服务端 WebSocket 地址（`Server WS Endpoint`，例如 `ws://your-host:7861/ws` 或 `wss://your-host/ws`）。其中 API Key 请填写与请求时相同的 key。连接建立成功后，状态页会显示在线浏览器会话，之后 API 请求才会被转发。
+页面中需要手动填写浏览器标志（`Browser Identifier`）、API Key，以及服务端 WebSocket 地址（`Server WS Endpoint`，例如 `ws://127.0.0.1:7861/ws` 或 `wss://your-host/ws`）。其中 API Key 请填写与请求时相同的 key。连接建立成功后，状态页会显示在线浏览器会话，之后 API 请求才会被转发。
 
 #### 🌐 步骤 3（可选）：使用 Nginx 反向代理
 

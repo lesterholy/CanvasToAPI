@@ -57,11 +57,11 @@ A tool that exposes a Gemini web session as OpenAI API, Gemini API, and Anthropi
    The actual page content is also available in the repository at [scripts/client/canvas.html](scripts/client/canvas.html).
 
    Fill in:
-   - `Server WS Endpoint`: for example `ws://127.0.0.1:7861/ws` for local use, or your public server WebSocket address for remote deployments
+   - `Server WS Endpoint`: `ws://127.0.0.1:7861/ws` for local use
    - `API Key`: enter the same key you use for API requests
    - `Browser Identifier`: an optional browser tag; if left blank, the page auto-generates a daily identifier
 
-   Then click `Connect`. Once connected, confirm that `Browser Sessions` shows at least one online session in the status page.
+   Then click `Save` and click `Connect`. Once connected, confirm that `Browser Sessions` shows at least one online session in the status page.
 
 6. Start sending API requests:
 
@@ -142,7 +142,7 @@ After the container starts, you still need to manually open the following page a
 
 [https://gemini.google.com/share/a106ab8dac80](https://gemini.google.com/share/a106ab8dac80)
 
-On that page, manually enter the browser tag (`Browser Identifier`), API key, and the server WebSocket address (`Server WS Endpoint`), for example `ws://your-host:7861/ws` or `wss://your-host/ws`. The API key should be the same one you use for API requests. Once the browser session is connected, the status page will show it as online and the API can begin forwarding requests.
+On that page, manually enter the browser tag (`Browser Identifier`), API key, and the server WebSocket address (`Server WS Endpoint`), for example `ws://127.0.0.1:7861/ws` or `wss://your-host/ws`. The API key should be the same one you use for API requests. Once the browser session is connected, the status page will show it as online and the API can begin forwarding requests.
 
 #### 🌐 Step 3 (Optional): Nginx Reverse Proxy
 
